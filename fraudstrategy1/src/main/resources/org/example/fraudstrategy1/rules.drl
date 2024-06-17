@@ -1,0 +1,160 @@
+package org.example.fraudstrategy1;
+
+import org.example.fraudstrategy1.Merchant;
+
+global org.example.fraudstrategy1.Decision decision;
+
+dialect "mvel"
+
+rule "Rule 1"
+    when
+        Merchant(
+            uwScore >= 7.269 &&
+            ownerPhoneCarrier in ("Access One, Inc", "USA MOBILITY WIRELESS, INC.", 
+                                  "Tim Ron Enterprises, LLC", "Qwest Comms Company, LLC-NSR", 
+                                  "PACIFIC BELL", "Onvoy - NSR", "McLeod USA - NSR", 
+                                  "MCImetro Former Intermedia", "ICG TELECOM GROUP - MD", 
+                                  "Global NAPs", "Flowroute Inc - NSR", 
+                                  "CS Technologies Inc - GVNW", "NeutralTandem-NSR", 
+                                  "Onvoy - SVR", "Neutral Tandem - NSR", 
+                                  "BANDWIDTH.COM", "TCG", "Verizon", 
+                                  "Valor_Telecom-NSR", "Frontier Rochester- SVR", 
+                                  "YMAX Communications", "Peerless", 
+                                  "Telnet Worldwide NSR", "TDS Metrocom") &&
+            ownerRecentPhoneUsagePast2months in (null, 0, 1)
+        )
+    then
+        decision.setDecision("Decline      ");
+        decision.setRuleName("Rule 1 High Risk");
+end
+
+rule "Rule 2"
+    when
+        Merchant(
+            uwScore >= 7.269 &&
+            ownerPhoneCarrier in ("Access One, Inc", "USA MOBILITY WIRELESS, INC.", 
+                                  "Tim Ron Enterprises, LLC", "Qwest Comms Company, LLC-NSR", 
+                                  "PACIFIC BELL", "Onvoy - NSR", "McLeod USA - NSR", 
+                                  "MCImetro Former Intermedia", "ICG TELECOM GROUP - MD", 
+                                  "Global NAPs", "Flowroute Inc - NSR", 
+                                  "CS Technologies Inc - GVNW", "NeutralTandem-NSR", 
+                                  "Onvoy - SVR", "Neutral Tandem - NSR", 
+                                  "BANDWIDTH.COM", "TCG", "Verizon", 
+                                  "Valor_Telecom-NSR", "Frontier Rochester- SVR", 
+                                  "YMAX Communications", "Peerless", 
+                                  "Telnet Worldwide NSR", "TDS Metrocom") &&
+            ownerRecentPhoneUsagePast2months in (2, 3, 4)
+        )
+    then
+        decision.setDecision("Manual Review");
+        decision.setRuleName("Rule 2 Medium Risk");
+end
+
+
+rule "Rule 3"
+    when
+        Merchant(
+            uwScore >= 7.269 &&
+            uwScore >= 30.136 &&
+            identityScore >= 672 &&
+            ownerPhoneCarrier in ("BellSouth", "BHNIS - Florida, LLC - NSR", "Broadvox - NSR", 
+                                  "Metro PCS -Royal St. Comm - NSR", "Charter Fiber - NSR", "Level 3-SVR", 
+                                  "Metro PCS Comm - NSR", "CenturyLink", "Comcast Telecommunications of Michigan", 
+                                  "TelePacific", "RCLEC- NSR", "Qwest Communications", 
+                                  "Metro PCS Communications Inc", "Time Warner Cable - NSR", "Vonage Network Inc", 
+                                  "Verizon FDV", "Sprint PCS", "Comcast Phone", "SouthWestern Bell", 
+                                  "Verizon Wireless - SVR", "T-Mobile US-TSI", "SBC IP", "Cingular Wireless", 
+                                  "Vonage- NSR", "Cox Communications", "USCC - SVR", "Comcast Phone FL", 
+                                  "Pacific Bell - Nevada Bell", "PAETEC", "Hawaiian Telcom", "Big_River - NSR", 
+                                  "Brindlee Mountain Telephone Co.", "Qwest_Communications", "Broadview Networks", 
+                                  "HTC Communications", "Comcast Phone GA", "SIGECOM-NSR", "Simlab Communications, LLC", 
+                                  "Cellcom-SVR", "Cellular South - SVR", "Suddenlink - NSR", "SureWest Telephone-SVR", 
+                                  "MULTIPLE OCN LISTING", "Farmers Telephone Cooperative, Inc-JSI", "EPB - NSR", 
+                                  "Missouri Valley Communications-SVR", "DeltaCom, Inc - NSR", "Comcast Phone NER", 
+                                  "Mediacom-NSR", "ATI - NSR", "MCImetro Former Worldcom", "Ameritech", 
+                                  "Alliance Communications Cooperative", "FTC(Diversified Services)JSI", 
+                                  "MCImetro Former Brooks", "Lumos Networks Inc - NSR", 
+                                  "Lancaster Telephone Company-Comporium", "WCW - NSR", "Windstream_SL-NSR", 
+                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium")
+        )
+    then
+        decision.setDecision("Decline      ")
+        decision.setRuleName("Rule 3 High Risk");
+    end
+    
+ rule "Fraud Rule 4"
+    when
+        Merchant(
+            uwScore >= 7.269 &&
+            uwScore >= 30.136 &&
+            identityScore < 672 &&
+            ownerPhoneCarrier in ("BellSouth", "BHNIS - Florida, LLC - NSR", "Broadvox - NSR", 
+                                  "Metro PCS -Royal St. Comm - NSR", "Charter Fiber - NSR", "Level 3-SVR", 
+                                  "Metro PCS Comm - NSR", "CenturyLink", "Comcast Telecommunications of Michigan", 
+                                  "TelePacific", "RCLEC- NSR", "Qwest Communications", 
+                                  "Metro PCS Communications Inc", "Time Warner Cable - NSR", "Vonage Network Inc", 
+                                  "Verizon FDV", "Sprint PCS", "Comcast Phone", "SouthWestern Bell", 
+                                  "Verizon Wireless - SVR", "T-Mobile US-TSI", "SBC IP", "Cingular Wireless", 
+                                  "Vonage- NSR", "Cox Communications", "USCC - SVR", "Comcast Phone FL", 
+                                  "Pacific Bell - Nevada Bell", "PAETEC", "Hawaiian Telcom", "Big_River - NSR", 
+                                  "Brindlee Mountain Telephone Co.", "Qwest_Communications", "Broadview Networks", 
+                                  "HTC Communications", "Comcast Phone GA", "SIGECOM-NSR", "Simlab Communications, LLC", 
+                                  "Cellcom-SVR", "Cellular South - SVR", "Suddenlink - NSR", "SureWest Telephone-SVR", 
+                                  "MULTIPLE OCN LISTING", "Farmers Telephone Cooperative, Inc-JSI", "EPB - NSR", 
+                                  "Missouri Valley Communications-SVR", "DeltaCom, Inc - NSR", "Comcast Phone NER", 
+                                  "Mediacom-NSR", "ATI - NSR", "MCImetro Former Worldcom", "Ameritech", 
+                                  "Alliance Communications Cooperative", "FTC(Diversified Services)JSI", 
+                                  "MCImetro Former Brooks", "Lumos Networks Inc - NSR", 
+                                  "Lancaster Telephone Company-Comporium", "WCW - NSR", "Windstream_SL-NSR", 
+                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium")
+        )
+    then
+        decision.setDecision("Manual Review");
+        decision.setRuleName("Rule 4 Medium Risk");       
+    
+    end
+    
+    
+ rule "Fraud Rule 5"
+    when
+        Merchant(
+            uwScore >= 7.269 &&
+            uwScore < 30.136 &&
+            ownerPhoneCarrier in ("BellSouth", "BHNIS - Florida, LLC - NSR", "Broadvox - NSR", 
+                                  "Metro PCS -Royal St. Comm - NSR", "Charter Fiber - NSR", "Level 3-SVR", 
+                                  "Metro PCS Comm - NSR", "CenturyLink", "Comcast Telecommunications of Michigan", 
+                                  "TelePacific", "RCLEC- NSR", "Qwest Communications", 
+                                  "Metro PCS Communications Inc", "Time Warner Cable - NSR", "Vonage Network Inc", 
+                                  "Verizon FDV", "Sprint PCS", "Comcast Phone", "SouthWestern Bell", 
+                                  "Verizon Wireless - SVR", "T-Mobile US-TSI", "SBC IP", "Cingular Wireless", 
+                                  "Vonage- NSR", "Cox Communications", "USCC - SVR", "Comcast Phone FL", 
+                                  "Pacific Bell - Nevada Bell", "PAETEC", "Hawaiian Telcom", "Big_River - NSR", 
+                                  "Brindlee Mountain Telephone Co.", "Qwest_Communications", "Broadview Networks", 
+                                  "HTC Communications", "Comcast Phone GA", "SIGECOM-NSR", "Simlab Communications, LLC", 
+                                  "Cellcom-SVR", "Cellular South - SVR", "Suddenlink - NSR", "SureWest Telephone-SVR", 
+                                  "MULTIPLE OCN LISTING", "Farmers Telephone Cooperative, Inc-JSI", "EPB - NSR", 
+                                  "Missouri Valley Communications-SVR", "DeltaCom, Inc - NSR", "Comcast Phone NER", 
+                                  "Mediacom-NSR", "ATI - NSR", "MCImetro Former Worldcom", "Ameritech", 
+                                  "Alliance Communications Cooperative", "FTC(Diversified Services)JSI", 
+                                  "MCImetro Former Brooks", "Lumos Networks Inc - NSR", 
+                                  "Lancaster Telephone Company-Comporium", "WCW - NSR", "Windstream_SL-NSR", 
+                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium") &&
+            ownerPhone1toNameLinkage in (-1, 0)
+        )
+    then
+        decision.setDecision("Manual Review");
+        decision.setRuleName("Rule 5 Medium Risk");       
+end    
+       
+  rule "Fraud Rule 6"
+    when
+        Merchant(
+            uwScore < 7.269 &&
+            uwScore >= 2.893 &&
+            ownerPhoneInServiceIndicator in ("I2", "A2", "A3", "I1", "A1", "I3", "I6", "I4", "A4") &&
+            ownerPhone1toNameLinkage in (-2, -1, 0, 1)
+        )
+    then
+        decision.setDecision("Manual Review");
+        decision.setRuleName("Rule 6 Medium Risk");       
+end
