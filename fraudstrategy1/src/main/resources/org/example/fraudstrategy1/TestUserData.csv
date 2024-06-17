@@ -1,0 +1,7 @@
+Identifier,IdentityScore,EAScore,UWScore,Owner_Verified_Components,Owner_Negatively_Verified_Components,Owner_Phone_1_to_Name_Linkage,Owner_Phone_1_to_First_Name_Linkage,Owner_Address_to_Phone_1_Linkage,Owner_Email_to_Phone_1_Linkage,Owner_Prepaid_Phone_Attribute,Owner_Business_Phone_Indicator,Owner_Phone_InService_Indicator,Owner_Phone_Type_Indicator,Owner_Service_Discontinued_Indicator,Owner_Recent_Phone_Usage_Past_2_months,Owner_Phone_Usage_Past_12_months,Owner_Phone_Carrier,Owner_Parent_Phone_Carrier,Owner_Technology_Indicator,Owner_VoIP_Indicator,Owner_MVNO_Indicator,Fraud
+1000861,435,91,0.689,6,8,-2,-2,-2,-2,,,ABCD8,,NA,NA,NA,Cingular Wireless,AT&T,Wireless,,,0
+1000908,NA,239,0.58,3,8,2,2,-2,-1,N,B,A7,L,0,3,4,Broadview Networks,Windstream,Wireline,3,,0
+1000919,326,-500,0.994,2,8,2,1,2,0,N,U,A7,W,0,2,3,Verizon Wireless - SVR,Verizon,Wireless,,N,0
+1001062,429,Kevin,1.006,2,8,two,-1,-1,0,N,U,123,W,0,2,2,Cingular Wireless,AT&T,Wireless,2,N,0
+1011531,1234567,256,0.985,2,5,2,-2,-1,-2,N,B,A7,W,0,2,3,Cingular Wireless,AT&T,Wireless,1,N,0
+1017588,370,500,sbseg,2,8,2,-1,-1,0,N,U,A7,W,0,2,3,Verizon Wireless - SVR,Verizon,Wireless,Type error,N,0
