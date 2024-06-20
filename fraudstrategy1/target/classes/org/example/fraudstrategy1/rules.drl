@@ -1,3 +1,4 @@
+
 package org.example.fraudstrategy1;
 
 import org.example.fraudstrategy1.Merchant;
@@ -7,8 +8,9 @@ global org.example.fraudstrategy1.Decision decision;
 dialect "mvel"
 
 rule "Rule 1"
+	salience 40
     when
-        Merchant(
+         $merchant :Merchant(
             uwScore >= 7.269 &&
             ownerPhoneCarrier in ("Access One, Inc", "USA MOBILITY WIRELESS, INC.", 
                                   "Tim Ron Enterprises, LLC", "Qwest Comms Company, LLC-NSR", 
@@ -24,36 +26,15 @@ rule "Rule 1"
             ownerRecentPhoneUsagePast2months in (null, 0, 1)
         )
     then
-        decision.setDecision("Decline      ");
-        decision.setRuleName("Rule 1 High Risk");
+        $merchant.setDecision("Decline      ");
+        $merchant.addRuleName("Rule 1 High Risk");
 end
+
 
 rule "Rule 2"
+	salience 50
     when
-        Merchant(
-            uwScore >= 7.269 &&
-            ownerPhoneCarrier in ("Access One, Inc", "USA MOBILITY WIRELESS, INC.", 
-                                  "Tim Ron Enterprises, LLC", "Qwest Comms Company, LLC-NSR", 
-                                  "PACIFIC BELL", "Onvoy - NSR", "McLeod USA - NSR", 
-                                  "MCImetro Former Intermedia", "ICG TELECOM GROUP - MD", 
-                                  "Global NAPs", "Flowroute Inc - NSR", 
-                                  "CS Technologies Inc - GVNW", "NeutralTandem-NSR", 
-                                  "Onvoy - SVR", "Neutral Tandem - NSR", 
-                                  "BANDWIDTH.COM", "TCG", "Verizon", 
-                                  "Valor_Telecom-NSR", "Frontier Rochester- SVR", 
-                                  "YMAX Communications", "Peerless", 
-                                  "Telnet Worldwide NSR", "TDS Metrocom") &&
-            ownerRecentPhoneUsagePast2months in (2, 3, 4)
-        )
-    then
-        decision.setDecision("Manual Review");
-        decision.setRuleName("Rule 2 Medium Risk");
-end
-
-
-rule "Rule 3"
-    when
-        Merchant(
+        $merchant :Merchant(
             uwScore >= 7.269 &&
             uwScore >= 30.136 &&
             identityScore >= 672 &&
@@ -75,16 +56,44 @@ rule "Rule 3"
                                   "Alliance Communications Cooperative", "FTC(Diversified Services)JSI", 
                                   "MCImetro Former Brooks", "Lumos Networks Inc - NSR", 
                                   "Lancaster Telephone Company-Comporium", "WCW - NSR", "Windstream_SL-NSR", 
-                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium")
+                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium",null)
         )
     then
-        decision.setDecision("Decline      ")
-        decision.setRuleName("Rule 3 High Risk");
+        $merchant.setDecision("Decline      ")
+        $merchant.addRuleName("Rule 2 High Risk");
     end
     
- rule "Fraud Rule 4"
+    
+    
+ rule "Rule 3"
+	salience 60
     when
-        Merchant(
+         $merchant :Merchant(
+            uwScore >= 7.269 &&
+            ownerPhoneCarrier in ("Access One, Inc", "USA MOBILITY WIRELESS, INC.", 
+                                  "Tim Ron Enterprises, LLC", "Qwest Comms Company, LLC-NSR", 
+                                  "PACIFIC BELL", "Onvoy - NSR", "McLeod USA - NSR", 
+                                  "MCImetro Former Intermedia", "ICG TELECOM GROUP - MD", 
+                                  "Global NAPs", "Flowroute Inc - NSR", 
+                                  "CS Technologies Inc - GVNW", "NeutralTandem-NSR", 
+                                  "Onvoy - SVR", "Neutral Tandem - NSR", 
+                                  "BANDWIDTH.COM", "TCG", "Verizon", 
+                                  "Valor_Telecom-NSR", "Frontier Rochester- SVR", 
+                                  "YMAX Communications", "Peerless", 
+                                  "Telnet Worldwide NSR", "TDS Metrocom",null) &&
+            ownerRecentPhoneUsagePast2months in (2, 3, 4)
+        )
+    then
+        $merchant.setDecision("Manual Review");
+        $merchant.addRuleName("Rule 3 Medium Risk");
+end
+ 
+ 
+ 
+ rule "Fraud Rule 4"
+ 	salience 70
+    when
+        $merchant:Merchant(
             uwScore >= 7.269 &&
             uwScore >= 30.136 &&
             identityScore < 672 &&
@@ -106,18 +115,20 @@ rule "Rule 3"
                                   "Alliance Communications Cooperative", "FTC(Diversified Services)JSI", 
                                   "MCImetro Former Brooks", "Lumos Networks Inc - NSR", 
                                   "Lancaster Telephone Company-Comporium", "WCW - NSR", "Windstream_SL-NSR", 
-                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium")
+                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium",null)
         )
     then
-        decision.setDecision("Manual Review");
-        decision.setRuleName("Rule 4 Medium Risk");       
+        $merchant.setDecision("Manual Review");
+        $merchant.addRuleName("Rule 4 Medium Risk");       
     
     end
     
     
+    
  rule "Fraud Rule 5"
+  	salience 80
     when
-        Merchant(
+        $merchant:Merchant(
             uwScore >= 7.269 &&
             uwScore < 30.136 &&
             ownerPhoneCarrier in ("BellSouth", "BHNIS - Florida, LLC - NSR", "Broadvox - NSR", 
@@ -138,23 +149,36 @@ rule "Rule 3"
                                   "Alliance Communications Cooperative", "FTC(Diversified Services)JSI", 
                                   "MCImetro Former Brooks", "Lumos Networks Inc - NSR", 
                                   "Lancaster Telephone Company-Comporium", "WCW - NSR", "Windstream_SL-NSR", 
-                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium") &&
+                                  "XO Communications MO NSR", "Rock Hill Telephone Company-Comporium",null) &&
             ownerPhone1toNameLinkage in (-1, 0)
         )
     then
-        decision.setDecision("Manual Review");
-        decision.setRuleName("Rule 5 Medium Risk");       
+        $merchant.setDecision("Manual Review");
+        $merchant.addRuleName("Rule 5 Medium Risk");       
 end    
        
+       
   rule "Fraud Rule 6"
+   	salience 90
     when
-        Merchant(
+        $merchant:Merchant(
             uwScore < 7.269 &&
             uwScore >= 2.893 &&
-            ownerPhoneInServiceIndicator in ("I2", "A2", "A3", "I1", "A1", "I3", "I6", "I4", "A4") &&
+            ownerPhoneInServiceIndicator in ("I2", "A2", "A3", "I1", "A1", "I3", "I6", "I4", "A4",null) &&
             ownerPhone1toNameLinkage in (-2, -1, 0, 1)
         )
     then
-        decision.setDecision("Manual Review");
-        decision.setRuleName("Rule 6 Medium Risk");       
+        $merchant.setDecision("Manual Review");
+        $merchant.addRuleName("Rule 6 Medium Risk");       
+end
+
+rule "Default Rule"
+    salience 100
+    when
+        $merchant : Merchant(
+            decision == ""
+        )
+    then
+
+        $merchant.setDecision("Approve      ");
 end

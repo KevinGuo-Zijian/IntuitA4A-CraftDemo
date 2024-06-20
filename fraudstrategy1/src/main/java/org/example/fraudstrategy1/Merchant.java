@@ -1,5 +1,8 @@
 package org.example.fraudstrategy1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Merchant {
     private String identifier;
     private Integer identityScore;
@@ -24,7 +27,10 @@ public class Merchant {
     private Integer ownerVoIPIndicator;
     private String ownerMVNOIndicator;
     private Integer fraud;
+    private String decision;
+    private List<String> ruleNames;
 
+    // Merchant object constructor
     public Merchant(String identifier, Integer identityScore, Integer eaScore, Double uwScore,
                     Integer ownerVerifiedComponents, Integer ownerNegativelyVerifiedComponents, Integer ownerPhone1toNameLinkage,
                     Integer ownerPhone1toFirstNameLinkage, Integer ownerAddresstoPhone1Linkage, Integer ownerEmailtoPhone1Linkage,
@@ -32,7 +38,6 @@ public class Merchant {
                     String ownerPhoneTypeIndicator, Integer ownerServiceDiscontinuedIndicator, Integer ownerRecentPhoneUsagePast2months,
                     Integer ownerPhoneUsagePast12months, String ownerPhoneCarrier, String ownerParentPhoneCarrier,
                     String ownerTechnologyIndicator, Integer ownerVoIPIndicator, String ownerMVNOIndicator, Integer fraud) {
-    	
         this.identifier = identifier;
         this.identityScore = identityScore;
         this.eaScore = eaScore;
@@ -56,8 +61,11 @@ public class Merchant {
         this.ownerVoIPIndicator = ownerVoIPIndicator;
         this.ownerMVNOIndicator = ownerMVNOIndicator;
         this.fraud = fraud;
+        this.decision = "";  // Default decision
+        this.ruleNames = new ArrayList<>();
     }
 
+    // getters and setters
     public String getIdentifier() {
         return identifier;
     }
@@ -240,5 +248,28 @@ public class Merchant {
 
     public void setFraud(Integer fraud) {
         this.fraud = fraud;
+    }
+
+    public String getDecision() {
+        return decision;
+    }
+
+    public void setDecision(String decision) {
+        this.decision = decision;
+    }
+
+    public List<String> getRuleNames() {
+    	
+        if (this.ruleNames.isEmpty()) {
+            List<String> noRules = new ArrayList<>();
+            noRules.add("No Rules Triggered");
+            return noRules;
+        }
+        return ruleNames;
+    }
+
+    public void addRuleName(String ruleName) {
+
+        this.ruleNames.add(ruleName);
     }
 }

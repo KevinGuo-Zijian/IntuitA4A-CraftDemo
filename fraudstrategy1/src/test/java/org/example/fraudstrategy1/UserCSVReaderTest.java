@@ -47,7 +47,6 @@ public class UserCSVReaderTest {
             System.out.println("Owner Technology Indicator: " + user.getownerTechnologyIndicator());
             System.out.println("Owner VoIP Indicator: " + user.getownerVoIPIndicator());
             System.out.println("Owner MVNO Indicator: " + user.getownerMVNOIndicator());
-            System.out.println("Fraud: " + user.getFraud());
             System.out.println("--------------------------------");
         }
     }

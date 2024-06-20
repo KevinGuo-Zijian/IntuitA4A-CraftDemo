@@ -16,11 +16,22 @@ import org.kie.internal.io.ResourceFactory;
 
 
 public class KieServ {
+	
+	//create a KieServices Instance, which is a factory class defined in drools package
+	
 	private KieServices kieServices = KieServices.Factory.get();
 
+	// method to create a KieFileSystem
 	private KieFileSystem getKieFileSystem() {
+		
 		KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
-		List<String> rules = Arrays.asList("org/example/fraudstrategy1/rules.drl");
+		
+		// insert list of rules
+		List<String> rules = Arrays.asList("org/example/fraudstrategy1/multiplerules.drl");
+		
+		// rule test set
+		//List<String> rules = Arrays.asList("org/example/fraudstrategy1/rules.drl");
+		
 		for (String rule : rules) {
 			kieFileSystem.write(ResourceFactory.newClassPathResource(rule));
 		}
@@ -28,13 +39,20 @@ public class KieServ {
 	}
 
 	public KieSession getKieSession() {
+		
+		// build KIE session with given KIE file system
 		KieBuilder kb = kieServices.newKieBuilder(getKieFileSystem());
 		kb.buildAll();
-
+		
 		KieRepository kieRepository = kieServices.getRepository();
+		
 		ReleaseId krDefaultReleaseId = kieRepository.getDefaultReleaseId();
+		
+		
 		KieContainer kieContainer = kieServices.newKieContainer(krDefaultReleaseId);
-
+		
+		
+		// return built KieSession
 		return kieContainer.newKieSession();
 	}
 

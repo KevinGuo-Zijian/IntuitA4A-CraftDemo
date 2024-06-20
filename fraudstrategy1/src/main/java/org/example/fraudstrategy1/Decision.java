@@ -7,6 +7,7 @@ public class Decision {
 	private String ruleName;
 	
     public Decision() {
+    	// default decision "no rules fired"
         this.decision = "Approve      ";
         this.ruleName = "No Rules Triggered - Approve";
     }
@@ -14,7 +15,7 @@ public class Decision {
 	public String getDecision() {
 		return decision;
 	}
-// TODO
+
 	public void setDecision(String decision) {
 		this.decision = decision;
 		

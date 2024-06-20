@@ -83,7 +83,7 @@ public class UserCSVReader {
         this.ownerMVNOIndicator = ownerMVNOIndicator;
         this.Fraud = Fraud;
     }
-    
+    // Method to convert UserCSVReader to Merchant object
     public Merchant toMerchant() {
         return new Merchant(
             this.identifier,
@@ -207,18 +207,29 @@ public class UserCSVReader {
     
     // Method to read user data from a CSV file and return a list of UserCSVReader objects
     public static List<UserCSVReader> readFromCSV(String filePath) {
+    	// initialize an array list to store list of UserCSVReader
         List<UserCSVReader> users = new ArrayList<>();
+        
+        // create a CSV reader object with given filepath
         try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+        	
+        	// create a array of string to store a single line from CSV
             String[] line;
+            
+            // variable to check if its the head line of CSV file
             boolean isFirstLine = true;
+            
+            // loop through the CSV file by readNext, when next line is null, end loop and return null
             while ((line = reader.readNext()) != null) {
                 if (isFirstLine) {
                     isFirstLine = false;
                     continue; // Skip the first line
                 }
+                
+                // save read data into variables
                 String identifier = line[0];
-                Integer identityScore = parseInteger(line[1],0,999); // Parse and handle possible null
-                Integer eaScore = parseInteger(line[2],0,999); // Parse and handle possible null
+                Integer identityScore = parseInteger(line[1],0,999); // Parse and handle possible null with range 0-999
+                Integer eaScore = parseInteger(line[2],0,999); // Parse and handle possible null with range 0-999
                 Double uwScore = parseDouble(line[3],0.0,99.9);
                 Integer ownerVerifiedComponents = parseInteger(line[4]);
                 Integer ownerNegativelyVerifiedComponents = parseInteger(line[5]);
@@ -228,7 +239,7 @@ public class UserCSVReader {
                 Integer ownerEmailtoPhone1Linkage = parseInteger(line[9]);
                 String ownerPrepaidPhoneAttribute = parseString(line[10]);
                 String ownerBusinessPhoneIndicator = parseString(line[11]);
-                String ownerPhoneInServiceIndicator = parseString(line[12],"^[AIU][1-7]$"); // only parse specific pattern for categorical attributes
+                String ownerPhoneInServiceIndicator = parseString(line[12],"^[AIU][1-7]$"); // only parse specific pattern for categorical attributes             
                 String ownerPhoneTypeIndicator = parseString(line[13]);
                 Integer ownerServiceDiscontinuedIndicator = parseInteger(line[14]);
                 Integer ownerRecentPhoneUsagePast2months = parseInteger(line[15]);
@@ -240,7 +251,7 @@ public class UserCSVReader {
                 String ownerMVNOIndicator = parseString(line[21]);
                 Integer Fraud = parseInteger(line[22]);
                       
-                // Add a new UserCSVReader object to the list
+                // Add a new UserCSVReader object to the list with the scanned attribute value
                 users.add(new UserCSVReader(identifier, 
                         identityScore, 
                         eaScore, 
@@ -265,6 +276,7 @@ public class UserCSVReader {
                         ownerMVNOIndicator,
                         Fraud));
             }
+        // catch CSV reader errors file path not effective or CSV file type problem
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
@@ -274,7 +286,10 @@ public class UserCSVReader {
     // Method to parse integer values and handle exceptions and range validation
     private static Integer parseInteger(String value, Integer minValue, Integer maxValue) {
         try {
+        	// translate the string parsed from CSV to integer
             Integer parsedValue = Integer.parseInt(value);
+            
+            // check if parsed integer is within range 
             if (parsedValue >= minValue && parsedValue <= maxValue) {
                 return parsedValue;
             } else {
@@ -315,12 +330,15 @@ public class UserCSVReader {
             return null; // Return null if the string is empty
         }
         
+        // check if the string match the given regex pattern
         if (regex != null && !regex.trim().isEmpty()) {
+        	
+        	// if match return string,else return null
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(value);
             
             if (!matcher.matches()) {
-                return null; // Return null if it doesn't match the regex
+                return null; // Return null if it doesn't match the regex pattern
             }
         }
         

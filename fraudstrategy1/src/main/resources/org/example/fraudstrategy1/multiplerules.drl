@@ -1,0 +1,63 @@
+
+package org.example.fraudstrategy1;
+
+import org.example.fraudstrategy1.Merchant;
+
+global org.example.fraudstrategy1.Decision decision;
+
+dialect "mvel"
+
+rule "Rule 1"
+	salience 40
+    when
+         $merchant :Merchant(
+            uwScore >= 7.269 &&
+            eaScore >= 500
+        )
+    then
+        $merchant.setDecision("Decline      ");
+        $merchant.addRuleName("Rule 1 High Risk");
+end
+
+    
+ rule "Rule 2"
+	salience 60
+    when
+         $merchant :Merchant(
+            uwScore >= 7.269 &&
+        	uwScore >= 50 &&
+            ownerRecentPhoneUsagePast2months in (2, 3, 4,null)
+        )
+    then
+        $merchant.setDecision("Manual Review");
+        $merchant.addRuleName("Rule 2 Medium Risk");
+end
+ 
+ 
+ 
+ rule "Fraud Rule 3"
+ 	salience 70
+    when
+        $merchant:Merchant(
+            uwScore >= 7.269 &&
+            uwScore >= 30.136 &&
+            identityScore <= 672
+        )
+    then
+        $merchant.setDecision("Manual Review");
+        $merchant.addRuleName("Rule 3 Medium Risk");       
+    
+    end
+    
+       
+
+rule "Default Rule"
+    salience 100
+    when
+        $merchant : Merchant(
+            decision == ""
+        )
+    then
+
+        $merchant.setDecision("Approve      ");
+end
